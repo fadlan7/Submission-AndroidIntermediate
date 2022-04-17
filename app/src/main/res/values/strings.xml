@@ -7,8 +7,12 @@
     <string name="welcome_header">Selamat Datang</string>
     <string name="welcome_title">Aplikasi untuk berbagi foto yang memungkinkan pengguna mengambil foto dan membagikan foto tersebut dengan disertai caption.</string>
     <string name="login_header">Login</string>
+    <string name="image_login_desc">Gambar Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="no_account">Don\'t have an account?</string>
     <string name="signup_here">Sign up here</string>
+    <string name="signup_header">Create a New Account</string>
+    <string name="image_signup_desc">Gambar SignUp</string>
+    <string name="name">Nama</string>
 </resources>
