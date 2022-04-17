@@ -1,18 +1,40 @@
 package com.fadlan.storyapp.main
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import com.fadlan.storyapp.R
+import com.fadlan.storyapp.ViewModelFactory
+import com.fadlan.storyapp.databinding.ActivityMainBinding
+import com.fadlan.storyapp.welcome.WelcomeActivity
+import packagecom.fadlan.storyapp.model.UserPreference
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var mainViewModel: MainViewModel
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupView()
+        setupViewModel()
+        setupAction()
+        playAnimation()
     }
 
     private fun setupView() {
@@ -26,5 +48,44 @@ class MainActivity : AppCompatActivity() {
             )
         }
         supportActionBar?.hide()
+    }
+
+    private fun setupViewModel() {
+        mainViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(UserPreference.getInstance(dataStore))
+        )[MainViewModel::class.java]
+
+        mainViewModel.getUser().observe(this) { user ->
+            if (user.isLogin) {
+                binding.nameTextView.text = getString(R.string.greeting, user.name)
+            } else {
+                startActivity(Intent(this, WelcomeActivity::class.java))
+                finish()
+            }
+        }
+    }
+
+    private fun setupAction() {
+        binding.logoutButton.setOnClickListener {
+            mainViewModel.logout()
+        }
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val name = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(500)
+        val message = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(500)
+        val logout = ObjectAnimator.ofFloat(binding.logoutButton, View.ALPHA, 1f).setDuration(500)
+
+        AnimatorSet().apply {
+            playSequentially(name, message, logout)
+            startDelay = 500
+        }.start()
     }
 }

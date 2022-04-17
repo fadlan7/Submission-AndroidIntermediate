@@ -15,4 +15,8 @@
     <string name="signup_header">Create a New Account</string>
     <string name="image_signup_desc">Gambar SignUp</string>
     <string name="name">Nama</string>
+    <string name="signup_btn">Create Account</string>
+    <string name="message_main_page">HOLAAAA</string>
+    <string name="logout_btn">Logout</string>
+    <string name="greeting">Halo %1$s,</string>
 </resources>
