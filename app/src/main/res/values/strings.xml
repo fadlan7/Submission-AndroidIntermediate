@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="story_app">Story App</string>
+    <string name="login">Masuk Sekarang</string>
+    <string name="create_account">Buat Akun</string>
+    <string name="image_welcome_desc">Gambar Welcome</string>
+    <string name="welcome_header">Selamat Datang</string>
+    <string name="welcome_title">Aplikasi untuk berbagi foto yang memungkinkan pengguna mengambil foto dan membagikan foto tersebut dengan disertai caption.</string>
+</resources>
