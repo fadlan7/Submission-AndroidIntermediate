@@ -1,4 +1,4 @@
-package packagecom.fadlan.storyapp.model
+package com.fadlan.storyapp.model
 
 data class UserModel(
     val name: String,

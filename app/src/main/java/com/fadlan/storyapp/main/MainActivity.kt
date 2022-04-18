@@ -17,8 +17,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.fadlan.storyapp.R
 import com.fadlan.storyapp.ViewModelFactory
 import com.fadlan.storyapp.databinding.ActivityMainBinding
+import com.fadlan.storyapp.model.UserPreference
 import com.fadlan.storyapp.welcome.WelcomeActivity
-import packagecom.fadlan.storyapp.model.UserPreference
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 

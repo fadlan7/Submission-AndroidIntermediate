@@ -1,4 +1,4 @@
-package packagecom.fadlan.storyapp.model
+package com.fadlan.storyapp.model
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

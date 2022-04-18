@@ -2,9 +2,9 @@ package com.fadlan.storyapp.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fadlan.storyapp.model.UserModel
+import com.fadlan.storyapp.model.UserPreference
 import kotlinx.coroutines.launch
-import packagecom.fadlan.storyapp.model.UserModel
-import packagecom.fadlan.storyapp.model.UserPreference
 
 class SignupViewModel(private val pref: UserPreference) : ViewModel() {
     fun saveUser(user: UserModel) {

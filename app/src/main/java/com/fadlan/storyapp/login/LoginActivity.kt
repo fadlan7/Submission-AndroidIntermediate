@@ -12,12 +12,11 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import com.fadlan.storyapp.R
 import com.fadlan.storyapp.ViewModelFactory
 import com.fadlan.storyapp.databinding.ActivityLoginBinding
 import com.fadlan.storyapp.main.MainActivity
-import packagecom.fadlan.storyapp.model.UserModel
-import packagecom.fadlan.storyapp.model.UserPreference
+import com.fadlan.storyapp.model.UserModel
+import com.fadlan.storyapp.model.UserPreference
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -28,7 +27,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupView()
         setupViewModel()

@@ -10,13 +10,13 @@
     <string name="image_login_desc">Gambar Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="no_account">Don\'t have an account?</string>
-    <string name="signup_here">Sign up here</string>
-    <string name="signup_header">Create a New Account</string>
+    <string name="no_account">Belum mempunyai akun?</string>
+    <string name="signup_here">Buat akun disini</string>
+    <string name="signup_header">Buat Akun Baru</string>
     <string name="image_signup_desc">Gambar SignUp</string>
     <string name="name">Nama</string>
-    <string name="signup_btn">Create Account</string>
+    <string name="signup_btn">Buat Akun</string>
     <string name="message_main_page">HOLAAAA</string>
-    <string name="logout_btn">Logout</string>
+    <string name="logout_btn">Keluar</string>
     <string name="greeting">Halo %1$s,</string>
 </resources>

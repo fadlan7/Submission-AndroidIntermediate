@@ -140,7 +140,7 @@
         android:id="@+id/no_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/no_account"
         android:textSize="16sp"
@@ -152,11 +152,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/signup_here"
+        android:textColor="@color/primer"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/primer"
         app:layout_constraintEnd_toEndOf="@+id/loginButton"
         app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 

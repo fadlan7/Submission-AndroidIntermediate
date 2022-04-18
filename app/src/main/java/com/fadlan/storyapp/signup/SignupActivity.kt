@@ -1,20 +1,23 @@
 package com.fadlan.storyapp.signup
 
-import android.content.Context
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.WindowInsets
-import android.view.WindowManager
-import androidx.appcompat.app.AlertDialog
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
-import com.fadlan.storyapp.ViewModelFactory
-import com.fadlan.storyapp.databinding.ActivitySignupBinding
-import packagecom.fadlan.storyapp.model.UserModel
-import packagecom.fadlan.storyapp.model.UserPreference
+    import android.animation.AnimatorSet
+    import android.animation.ObjectAnimator
+    import android.content.Context
+    import android.os.Build
+    import androidx.appcompat.app.AppCompatActivity
+    import android.os.Bundle
+    import android.view.View
+    import android.view.WindowInsets
+    import android.view.WindowManager
+    import androidx.appcompat.app.AlertDialog
+    import androidx.datastore.core.DataStore
+    import androidx.datastore.preferences.core.Preferences
+    import androidx.datastore.preferences.preferencesDataStore
+    import androidx.lifecycle.ViewModelProvider
+    import com.fadlan.storyapp.ViewModelFactory
+    import com.fadlan.storyapp.databinding.ActivitySignupBinding
+    import com.fadlan.storyapp.model.UserModel
+    import com.fadlan.storyapp.model.UserPreference
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -30,6 +33,7 @@ class SignupActivity : AppCompatActivity() {
         setupView()
         setupViewModel()
         setupAction()
+        playAnimation()
     }
 
     private fun setupView() {
@@ -81,5 +85,37 @@ class SignupActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.imgLogin, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val title = ObjectAnimator.ofFloat(binding.signupHeader, View.ALPHA, 1f).setDuration(500)
+        val nameTextView = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(500)
+        val nameEditTextLayout = ObjectAnimator.ofFloat(binding.nameEditTextLayout, View.ALPHA, 1f).setDuration(500)
+        val emailTextView = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(500)
+        val emailEditTextLayout = ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(500)
+        val passwordTextView = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(500)
+        val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(500)
+        val signup = ObjectAnimator.ofFloat(binding.signupButton, View.ALPHA, 1f).setDuration(500)
+
+
+        AnimatorSet().apply {
+            playSequentially(
+                title,
+                nameTextView,
+                nameEditTextLayout,
+                emailTextView,
+                emailEditTextLayout,
+                passwordTextView,
+                passwordEditTextLayout,
+                signup
+            )
+            startDelay = 500
+        }.start()
     }
 }
