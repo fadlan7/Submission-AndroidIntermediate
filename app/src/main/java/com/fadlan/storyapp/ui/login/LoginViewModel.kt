@@ -1,4 +1,4 @@
-package com.fadlan.storyapp.login
+package com.fadlan.storyapp.ui.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

@@ -2,10 +2,10 @@ package com.fadlan.storyapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.fadlan.storyapp.login.LoginViewModel
-import com.fadlan.storyapp.main.MainViewModel
+import com.fadlan.storyapp.ui.login.LoginViewModel
+import com.fadlan.storyapp.ui.main.MainViewModel
 import com.fadlan.storyapp.model.UserPreference
-import com.fadlan.storyapp.signup.SignupViewModel
+import com.fadlan.storyapp.ui.signup.SignupViewModel
 
 class ViewModelFactory(private val pref: UserPreference) : ViewModelProvider.NewInstanceFactory() {
 

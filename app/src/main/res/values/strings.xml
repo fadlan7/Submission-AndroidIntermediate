@@ -19,4 +19,14 @@
     <string name="message_main_page">HOLAAAA</string>
     <string name="logout_btn">Keluar</string>
     <string name="greeting">Halo %1$s,</string>
+    <string name="have_account">Sudah mempunyai Akun?</string>
+    <string name="login_now">Masuk disini</string>
+    <string name="input_email">Masukkan email</string>
+    <string name="input_password">Masukkan password</string>
+    <string name="yeah">Yeah!</string>
+    <string name="login_success">Anda berhasil login</string>
+    <string name="signup_success">Anda berhasil membuat akun</string>
+    <string name="input_name">Masukkan nama</string>
+    <string name="email_not_match">Email tidak cocok</string>
+    <string name="password_not_match">Password tidak cocok</string>
 </resources>

@@ -10,16 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StoryApp">
         <activity
-            android:name=".signup.SignupActivity"
+            android:name=".ui.signup.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".ui.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".welcome.WelcomeActivity"
+            android:name=".ui.welcome.WelcomeActivity"
             android:exported="false" />
         <activity
-            android:name=".main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

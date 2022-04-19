@@ -1,4 +1,4 @@
-package com.fadlan.storyapp.signup
+package com.fadlan.storyapp.ui.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

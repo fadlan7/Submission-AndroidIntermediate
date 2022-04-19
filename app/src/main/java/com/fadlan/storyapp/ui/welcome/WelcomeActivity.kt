@@ -1,4 +1,4 @@
-package com.fadlan.storyapp.welcome
+package com.fadlan.storyapp.ui.welcome
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -10,8 +10,8 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.fadlan.storyapp.databinding.ActivityWelcomeBinding
-import com.fadlan.storyapp.login.LoginActivity
-import com.fadlan.storyapp.signup.SignupActivity
+import com.fadlan.storyapp.ui.login.LoginActivity
+import com.fadlan.storyapp.ui.signup.SignupActivity
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding

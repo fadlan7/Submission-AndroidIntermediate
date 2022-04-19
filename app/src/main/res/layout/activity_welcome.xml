@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/activity_welcome_scene"
-    tools:context=".welcome.WelcomeActivity">
+    tools:context=".ui.welcome.WelcomeActivity">
 
     <TextView
         android:id="@+id/AppLabel"
