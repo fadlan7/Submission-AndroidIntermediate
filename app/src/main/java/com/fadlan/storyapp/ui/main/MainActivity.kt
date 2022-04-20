@@ -7,9 +7,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
+import android.view.*
 import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -47,7 +45,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, homeFragment)
             .commit()
 
-
         binding.bottomNavigation.setOnNavigationItemReselectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
@@ -66,9 +63,25 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-//        setupViewModel()
+        setupViewModel()
 //        setupAction()
 //        playAnimation()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.top_nav, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.logout_btn -> {
+                mainViewModel.logout()
+                true
+            }
+            else -> true
+        }
     }
 
     private fun setupViewModel() {
@@ -78,14 +91,7 @@ class MainActivity : AppCompatActivity() {
         )[MainViewModel::class.java]
 
         mainViewModel.getUser().observe(this) { user ->
-            if (user.isLogin) {
-                Toast.makeText(
-                    applicationContext, getString(R.string.greeting, user.name),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-//                binding.nameTextView.text = getString(R.string.greeting, user.name)
-            } else {
+            if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
             }
