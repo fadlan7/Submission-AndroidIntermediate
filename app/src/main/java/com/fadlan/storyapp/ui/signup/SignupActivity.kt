@@ -7,11 +7,12 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -19,11 +20,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.fadlan.storyapp.R
 import com.fadlan.storyapp.ViewModelFactory
 import com.fadlan.storyapp.databinding.ActivitySignupBinding
+import com.fadlan.storyapp.helper.FieldValidators
 import com.fadlan.storyapp.ui.login.LoginActivity
 import com.fadlan.storyapp.model.UserModel
 import com.fadlan.storyapp.model.UserPreference
+import com.fadlan.storyapp.ui.login.LoginViewModel
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+//private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -35,9 +38,16 @@ class SignupActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupView()
+        setupListeners()
         setupViewModel()
         setupAction()
         playAnimation()
+
+        binding.signupButton.setOnClickListener {
+            if (isValidate()) {
+                Toast.makeText(this, "validated", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupView() {
@@ -54,10 +64,20 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        signupViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[SignupViewModel::class.java]
+//        signupViewModel = ViewModelProvider(
+//            this,
+//            ViewModelFactory(UserPreference.getInstance(dataStore))
+//        )[SignupViewModel::class.java]
+
+        signupViewModel = ViewModelProvider(this)[SignupViewModel::class.java]
+
+        signupViewModel.message.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
+
+        signupViewModel.isLoading.observe(this) {
+            binding.loadingBar.visibility = View.VISIBLE
+        }
     }
 
     private fun setupAction() {
@@ -76,7 +96,7 @@ class SignupActivity : AppCompatActivity() {
                     binding.passwordEditTextLayout.error = getString(R.string.input_password)
                 }
                 else -> {
-                    signupViewModel.saveUser(UserModel(name, email, password, false))
+                    signupViewModel.signUpUser(name, email, password)
 
                     Toast.makeText(
                         applicationContext, getString(R.string.signup_success),
@@ -129,5 +149,47 @@ class SignupActivity : AppCompatActivity() {
             )
             startDelay = 500
         }.start()
+    }
+
+    private fun isValidate(): Boolean = validateEmail() && validatePassword()
+
+    private fun setupListeners() {
+        binding.emailEditText.addTextChangedListener(TextFieldValidation(binding.emailEditText))
+        binding.passwordEditText.addTextChangedListener(TextFieldValidation(binding.passwordEditText))
+    }
+
+    private fun validateEmail(): Boolean {
+        if (!FieldValidators.isValidEmail(binding.emailEditText.text.toString())) {
+            binding.emailEditTextLayout.error =  getString(R.string.invalid_email)
+            binding.emailEditText.requestFocus()
+            return false
+        } else {
+            binding.emailEditTextLayout.isErrorEnabled = false
+        }
+        return true
+    }
+
+    private fun validatePassword(): Boolean {
+        if (binding.passwordEditText.text.toString().length < 6) {
+            binding.passwordEditTextLayout.error =  getString(R.string.password_cant_be_less)
+            binding.passwordEditText.requestFocus()
+            return false
+        }
+        return true
+    }
+
+    inner class TextFieldValidation(private val view: View) : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            when (view.id) {
+                R.id.emailEditText -> {
+                    validateEmail()
+                }
+                R.id.passwordEditText -> {
+                    validatePassword()
+                }
+            }
+        }
     }
 }

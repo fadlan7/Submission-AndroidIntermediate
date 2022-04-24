@@ -1,69 +1,73 @@
 package com.fadlan.storyapp.ui.main
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.*
-import android.widget.Toast
+import androidx.core.app.ActivityOptionsCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.fadlan.storyapp.R
 import com.fadlan.storyapp.ViewModelFactory
+import com.fadlan.storyapp.adapter.StoryAdapter
 import com.fadlan.storyapp.databinding.ActivityMainBinding
 import com.fadlan.storyapp.model.UserPreference
 import com.fadlan.storyapp.ui.home.HomeFragment
 import com.fadlan.storyapp.ui.newstory.NewStoryFragment
 import com.fadlan.storyapp.ui.setting.SettingFragment
 import com.fadlan.storyapp.ui.welcome.WelcomeActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlin.concurrent.fixedRateTimer
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+//private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
-    private val homeFragment = HomeFragment()
-    private val newStoryFragment = NewStoryFragment()
-    private val settingFragment = SettingFragment()
+    private lateinit var adapter: StoryAdapter
+    private lateinit var pref: UserPreference
+//    private val homeFragment = HomeFragment()
+//    private val newStoryFragment = NewStoryFragment()
+//    private val settingFragment = SettingFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        bottomNavigation = binding.bottomNavigation
+        pref = UserPreference(this)
 
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, homeFragment)
-            .commit()
-
-        binding.bottomNavigation.setOnNavigationItemReselectedListener { item ->
-            when (item.itemId) {
-                R.id.home -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, homeFragment).commit()
-                }
-                R.id.new_story -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, newStoryFragment).commit()
-                }
-                R.id.setting -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, settingFragment).commit()
-                }
-            }
-        }
+//        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, homeFragment)
+//            .commit()
+//
+//        binding.bottomNavigation.setOnNavigationItemReselectedListener { item ->
+//            when (item.itemId) {
+//                R.id.home -> {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.fragment_container, homeFragment).commit()
+//                }
+//                R.id.new_story -> {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.fragment_container, newStoryFragment).commit()
+//                }
+//                R.id.setting -> {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.fragment_container, settingFragment).commit()
+//                }
+//            }
+//        }
 
 
         setupViewModel()
+        validation()
+        showRecyclerList()
 //        setupAction()
 //        playAnimation()
     }
@@ -77,24 +81,67 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logout_btn -> {
-                mainViewModel.logout()
+                pref.logout()
+                startActivity(Intent(this, WelcomeActivity::class.java))
+                finish()
+                true
+            }
+            R.id.language_setting -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
                 true
             }
             else -> true
         }
     }
 
-    private fun setupViewModel() {
-        mainViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[MainViewModel::class.java]
+    private fun showRecyclerList() {
+        binding.rvStory.apply {
+            layoutManager =
+                if (applicationContext.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    GridLayoutManager(context, 2)
+                } else {
+                    LinearLayoutManager(context)
+                }
+        }
+    }
 
-        mainViewModel.getUser().observe(this) { user ->
-            if (!user.isLogin) {
-                startActivity(Intent(this, WelcomeActivity::class.java))
-                finish()
+
+    private fun setupViewModel() {
+//        mainViewModel = ViewModelProvider(
+//            this,
+//            ViewModelFactory(UserPreference.getInstance(dataStore))
+//        )[MainViewModel::class.java]
+//
+//        mainViewModel.getUser().observe(this) { user ->
+//            if (!user.isLogin) {
+//                startActivity(Intent(this, WelcomeActivity::class.java))
+//                finish()
+//            }
+//        }
+
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
+//        if (!pref.getUser().toString()) {
+//
+//        }
+
+        mainViewModel.getAllStory(pref.getUser().token)
+
+        mainViewModel.story.observe(this) { storyItem ->
+            if (storyItem != null) {
+                adapter.initUserData(storyItem)
             }
+        }
+
+        mainViewModel.isLoading.observe(this) {
+            binding.loadingBar.visibility = View.VISIBLE
+        }
+    }
+
+    private fun validation() {
+        if (!pref.getUser().isLogin) {
+            startActivity(Intent(this, WelcomeActivity::class.java))
+            finish()
         }
     }
 //
