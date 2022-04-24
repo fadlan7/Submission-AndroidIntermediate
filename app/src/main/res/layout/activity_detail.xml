@@ -19,6 +19,7 @@
             android:layout_height="194dp"
             android:contentDescription="@string/story_image_desc"
             android:scaleType="centerCrop"
+            android:transitionName="story_image"
             tools:src="@tools:sample/avatars" />
 
         <LinearLayout
@@ -33,6 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceHeadline6"
+                android:transitionName="user_name"
                 tools:text="@string/name" />
 
             <TextView
@@ -42,7 +44,8 @@
                 android:layout_marginTop="8dp"
                 tools:text="@string/story_caption"
                 android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textColor="?android:attr/textColorSecondary"
+                android:transitionName="caption"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

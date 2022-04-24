@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -63,8 +64,15 @@ class StoryAdapter :
                 moveToDetail.putExtra(EXTRA_CAPTION, data.description)
                 moveToDetail.putExtra(EXTRA_IMAGE, data.photoUrl)
 
-//                itemView.context.startActivity(moveToDetail)
-                itemView.context.startActivity(moveToDetail, ActivityOptionsCompat.makeSceneTransitionAnimation(itemView.context as Activity).toBundle())
+                val optionsCompat: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        itemView.context as Activity,
+                        Pair(view.ivStory, "story_image"),
+                        Pair(view.tvUserName, "user_name"),
+                        Pair(view.tvCaption, "caption"),
+                    )
+
+                itemView.context.startActivity(moveToDetail, optionsCompat.toBundle())
             }
         }
     }
