@@ -11,6 +11,16 @@
         android:maxSdkVersion="18" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,7 +28,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StoryApp">
-     
+        <receiver
+            android:name=".widget.StoryWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/story_widget_info" />
+        </receiver>
+
         <activity
             android:name=".ui.signup.SignupActivity"
             android:exported="false" />
@@ -28,33 +49,32 @@
         <activity
             android:name=".ui.welcome.WelcomeActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.newstory.NewStoryActivity"
             android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fadlan.storyapp.ui.main.MainActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.NEWSTORY" />
 
                 <category android:name="android.intent.category.NEWSTORY" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.detail.DetailActivity"
             android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fadlan.storyapp.ui.main.MainActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.DETAIL" />
 
                 <category android:name="android.intent.category.DETAIL" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">
@@ -74,14 +94,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
-    </application>
 
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="https" />
-        </intent>
-    </queries>
+        <service
+            android:name="com.fadlan.storyapp.widget.StoriesWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+    </application>
 
 </manifest>
