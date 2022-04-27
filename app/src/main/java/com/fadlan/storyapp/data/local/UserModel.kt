@@ -1,4 +1,4 @@
-package com.fadlan.storyapp.model
+package com.fadlan.storyapp.data.local
 
 data class UserModel(
     val token: String,

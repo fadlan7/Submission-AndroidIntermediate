@@ -4,23 +4,23 @@ import androidx.lifecycle.*
 import com.fadlan.storyapp.data.remote.api.ApiConfig
 import com.fadlan.storyapp.data.remote.response.LoginResponse
 import com.fadlan.storyapp.data.remote.response.LoginResult
-import com.fadlan.storyapp.model.UserModel
-import com.fadlan.storyapp.model.UserPreference
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class LoginViewModel : ViewModel() {
 
-    private lateinit var pref: UserPreference
-    val login = MutableLiveData<LoginResult>()
-    val message = MutableLiveData<String>()
-    val isLoading = MutableLiveData<Boolean>()
+    private val _login = MutableLiveData<LoginResult>()
+    val login : LiveData<LoginResult> = _login
 
+    private val _message = MutableLiveData<String>()
+    val message:LiveData<String> = _message
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
 
     fun getUserLogin(email: String, password: String) {
-        isLoading.value = true
+        _isLoading.value = true
 
         ApiConfig.getApiService().userLogin(email, password)
             .enqueue(object : Callback<LoginResponse> {
@@ -28,26 +28,20 @@ class LoginViewModel : ViewModel() {
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
                 ) {
-                    isLoading.value = false
+                    _isLoading.value = false
                     if (response.isSuccessful) {
-                        message.value = response.body()?.message
-                        login.value = response.body()?.loginResult
+                        _message.value = response.body()?.message
+                        _login.value = response.body()?.loginResult
                     }
                     if (!response.isSuccessful) {
-                        message.value = response.message()
+                        _message.value = response.message()
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    message.value = t.message
-                    isLoading.value = false
+                    _message.value = t.message
+                    _isLoading.value = false
                 }
             })
     }
-
-//    fun saveUser(user: UserModel) {
-//        viewModelScope.launch {
-//            pref.saveUser(user)
-//        }
-//    }
 }

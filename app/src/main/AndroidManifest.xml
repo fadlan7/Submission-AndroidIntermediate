@@ -18,22 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StoryApp">
-        <activity
-            android:name=".ui.newstory.NewStoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.detail.DetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.newstory.AhaaaActivity"
-            android:exported="false"
-            android:label="@string/title_activity_ahaaa"
-            android:theme="@style/Theme.StoryApp.NoActionBar" />
-        <activity
-            android:name=".ui.camera.CameraActivity"
-            android:exported="false"
-            android:label="@string/title_activity_camera"
-            android:theme="@style/Theme.StoryApp.NoActionBar" />
+     
         <activity
             android:name=".ui.signup.SignupActivity"
             android:exported="false" />
@@ -43,6 +28,33 @@
         <activity
             android:name=".ui.welcome.WelcomeActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.newstory.NewStoryActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fadlan.storyapp.ui.main.MainActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.NEWSTORY" />
+
+                <category android:name="android.intent.category.NEWSTORY" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.detail.DetailActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fadlan.storyapp.ui.main.MainActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.DETAIL" />
+
+                <category android:name="android.intent.category.DETAIL" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">
@@ -52,6 +64,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.fadlan.storyapp"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
 
 </manifest>

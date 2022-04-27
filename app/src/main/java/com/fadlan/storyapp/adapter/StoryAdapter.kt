@@ -13,8 +13,10 @@ import com.fadlan.storyapp.data.remote.response.ListStoryItem
 import com.fadlan.storyapp.databinding.StoryItemBinding
 import com.fadlan.storyapp.helper.Constanta.EXTRA_CAPTION
 import com.fadlan.storyapp.helper.Constanta.EXTRA_IMAGE
+import com.fadlan.storyapp.helper.Constanta.EXTRA_UPLOAD_DATE
 import com.fadlan.storyapp.helper.Constanta.EXTRA_USER_NAME
 import com.fadlan.storyapp.helper.StoryDiffCallback
+import com.fadlan.storyapp.helper.setLocalDateFormat
 import com.fadlan.storyapp.ui.detail.DetailActivity
 
 class StoryAdapter :
@@ -23,13 +25,9 @@ class StoryAdapter :
     private var storyList = ArrayList<ListStoryItem>()
 
     fun initUserData(data: ArrayList<ListStoryItem>) {
-        storyList.apply {
-            clear()
-            addAll(data)
-        }
-
-        val diffCallback = StoryDiffCallback(this.storyList, data)
+        val diffCallback = StoryDiffCallback(storyList, data)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
+        storyList = data
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -50,17 +48,18 @@ class StoryAdapter :
             view.apply {
                 tvUserName.text = data.name
                 tvCaption.text = data.description
+                tvUploadDate.setLocalDateFormat(data.createdAt)
             }
 
             Glide.with(itemView.context)
                 .load(data.photoUrl)
-                .circleCrop()
                 .into(view.ivStory)
 
             itemView.setOnClickListener {
                 val moveToDetail = Intent(itemView.context, DetailActivity::class.java)
 
                 moveToDetail.putExtra(EXTRA_USER_NAME, data.name)
+                moveToDetail.putExtra(EXTRA_UPLOAD_DATE, data.createdAt)
                 moveToDetail.putExtra(EXTRA_CAPTION, data.description)
                 moveToDetail.putExtra(EXTRA_IMAGE, data.photoUrl)
 
@@ -68,6 +67,7 @@ class StoryAdapter :
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         itemView.context as Activity,
                         Pair(view.ivStory, "story_image"),
+                        Pair(view.tvUploadDate, "upload_date"),
                         Pair(view.tvUserName, "user_name"),
                         Pair(view.tvCaption, "caption"),
                     )

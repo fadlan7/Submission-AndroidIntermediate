@@ -4,22 +4,23 @@ import androidx.lifecycle.*
 import com.fadlan.storyapp.data.remote.api.ApiConfig
 import com.fadlan.storyapp.data.remote.response.GetAllStoryResponse
 import com.fadlan.storyapp.data.remote.response.ListStoryItem
-import com.fadlan.storyapp.model.UserModel
-import com.fadlan.storyapp.model.UserPreference
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel() : ViewModel() {
+class MainViewModel : ViewModel() {
 
-    private lateinit var pref: UserPreference
-    val story = MutableLiveData<ArrayList<ListStoryItem>>()
-    val message = MutableLiveData<String>()
-    val isLoading = MutableLiveData<Boolean>()
+    private val _story = MutableLiveData<ArrayList<ListStoryItem>>()
+    val story: LiveData<ArrayList<ListStoryItem>> = _story
+
+    private val _message = MutableLiveData<String>()
+    val message:LiveData<String> = _message
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
 
     fun getAllStory(token: String) {
-        isLoading.value = true
+        _isLoading.value = true
 
         ApiConfig.getApiService().getAllStories("Bearer $token")
             .enqueue(object : Callback<GetAllStoryResponse> {
@@ -27,25 +28,17 @@ class MainViewModel() : ViewModel() {
                     call: Call<GetAllStoryResponse>,
                     response: Response<GetAllStoryResponse>
                 ) {
-                    isLoading.value = false
+                    _isLoading.value = false
                     if (response.isSuccessful) {
-                        story.postValue(response.body()?.listStory)
+                        _story.postValue(response.body()?.listStory)
                     }
                 }
 
                 override fun onFailure(call: Call<GetAllStoryResponse>, t: Throwable) {
-                    message.value = t.message
-                    isLoading.value = false
+                    _message.value = t.message
+                    _isLoading.value = false
                 }
 
             })
-    }
-
-    //    fun getUser(): LiveData<UserModel> {
-//        return pref.getUser().asLiveData()
-//    }
-//
-    fun logout() {
-        pref.logout()
     }
 }

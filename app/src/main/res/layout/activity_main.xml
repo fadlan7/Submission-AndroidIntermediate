@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,126 +7,31 @@
     tools:context=".ui.main.MainActivity"
     android:background="@color/white">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/nameTextView"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:layout_marginEnd="32dp"-->
-    <!--        android:lines="1"-->
-    <!--        android:maxLines="1"-->
-    <!--        android:text=""-->
-    <!--        android:textColor="@color/black"-->
-    <!--        android:textSize="34sp"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="1.0"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal3"-->
-    <!--        android:alpha="0"-->
-    <!--        />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/messageTextView"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:layout_marginEnd="32dp"-->
-    <!--        android:text="@string/message_main_page"-->
-    <!--        android:textColor="@color/black"-->
-    <!--        android:textSize="16sp"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="1.0"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/nameTextView"-->
-    <!--        android:alpha="0"-->
-    <!--        />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/imageView"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="80dp"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:layout_marginEnd="32dp"-->
-    <!--        android:src="@drawable/ic_undraw_welcome"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal3"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal"-->
-    <!--        android:alpha="0"-->
-    <!--        />-->
-
-    <!--    <Button-->
-    <!--        android:id="@+id/logoutButton"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:layout_marginTop="16dp"-->
-    <!--        android:layout_marginEnd="32dp"-->
-    <!--        android:backgroundTint="@color/primer"-->
-    <!--        android:text="@string/logout_btn"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/messageTextView"-->
-    <!--        android:alpha="0"-->
-    <!--        />-->
-
-
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/bottom_navigation"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/primer"-->
-<!--        app:layout_constraintBottom_toTopOf="parent"-->
-<!--        app:layout_constraintEnd_toStartOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:menu="@menu/bottom_nav" />-->
-
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/bottom_navigation"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:menu="@menu/bottom_nav"-->
-<!--        />-->
-
-<!--    <FrameLayout-->
-<!--        android:id="@+id/fragment_container"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_story"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp"
         tools:listitem="@layout/story_item" />
 
     <ProgressBar
         android:id="@+id/loading_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center"
+        android:visibility="visible"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
         android:contentDescription="@string/fab_new_story"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_baseline_person_24" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="24dp"
+        app:icon="@drawable/ic_baseline_camera_enhance_24"
+        tools:ignore="RtlHardcoded" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

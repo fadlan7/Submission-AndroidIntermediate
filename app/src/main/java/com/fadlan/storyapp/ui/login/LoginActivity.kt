@@ -15,17 +15,14 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.fadlan.storyapp.R
-import com.fadlan.storyapp.ViewModelFactory
 import com.fadlan.storyapp.databinding.ActivityLoginBinding
+import com.fadlan.storyapp.helper.Constanta.LOGIN_PREF
 import com.fadlan.storyapp.helper.FieldValidators.isValidEmail
 import com.fadlan.storyapp.ui.main.MainActivity
-import com.fadlan.storyapp.model.UserModel
-import com.fadlan.storyapp.model.UserPreference
+import com.fadlan.storyapp.data.local.UserModel
+import com.fadlan.storyapp.data.local.UserPreference
 import com.fadlan.storyapp.ui.signup.SignupActivity
 
 
@@ -33,14 +30,14 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
     private lateinit var preferences: SharedPreferences
-    lateinit var user: UserPreference
+    private lateinit var user: UserPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        preferences = getSharedPreferences("login_preferences", Context.MODE_PRIVATE)
+        preferences = getSharedPreferences(LOGIN_PREF, Context.MODE_PRIVATE)
         user = UserPreference(this)
 
         setupView()
@@ -48,12 +45,6 @@ class LoginActivity : AppCompatActivity() {
         setupViewModel()
         setupAction()
         playAnimation()
-
-        binding.loginButton.setOnClickListener {
-            if (isValidate()) {
-                Toast.makeText(this, "validated", LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun setupView() {
@@ -83,8 +74,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
-            val password = binding.passwordEditText.text.toString()
+            val email = binding.emailEditText.text.toString().trim()
+            val password = binding.passwordEditText.text.toString().trim()
             when {
                 email.isEmpty() -> {
                     binding.emailEditTextLayout.error = getString(R.string.input_email)
@@ -114,9 +105,16 @@ class LoginActivity : AppCompatActivity() {
                             //save session
                            session(
                                 UserModel(
-                                    loginResult.token,true
+                                    loginResult.token, true
                                 )
                             )
+                        }else{
+                            Toast.makeText(
+                                applicationContext,
+                               "Login gagal",
+                                LENGTH_SHORT
+                            ).show()
+                            binding.loadingBar.visibility = View.GONE
                         }
                     }
                 }
@@ -166,8 +164,6 @@ class LoginActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun isValidate(): Boolean = validateEmail() && validatePassword()
-
     private fun setupListeners() {
         binding.emailEditText.addTextChangedListener(TextFieldValidation(binding.emailEditText))
         binding.passwordEditText.addTextChangedListener(TextFieldValidation(binding.passwordEditText))
@@ -189,7 +185,9 @@ class LoginActivity : AppCompatActivity() {
             binding.passwordEditTextLayout.error = getString(R.string.password_cant_be_less)
             binding.passwordEditText.requestFocus()
             return false
-        }
+        } else {
+             binding.passwordEditTextLayout.isErrorEnabled = false
+         }
         return true
     }
 

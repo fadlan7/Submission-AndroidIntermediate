@@ -2,7 +2,6 @@ package com.fadlan.storyapp.ui.signup
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -13,20 +12,11 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.fadlan.storyapp.R
-import com.fadlan.storyapp.ViewModelFactory
 import com.fadlan.storyapp.databinding.ActivitySignupBinding
 import com.fadlan.storyapp.helper.FieldValidators
 import com.fadlan.storyapp.ui.login.LoginActivity
-import com.fadlan.storyapp.model.UserModel
-import com.fadlan.storyapp.model.UserPreference
-import com.fadlan.storyapp.ui.login.LoginViewModel
-
-//private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -42,12 +32,6 @@ class SignupActivity : AppCompatActivity() {
         setupViewModel()
         setupAction()
         playAnimation()
-
-        binding.signupButton.setOnClickListener {
-            if (isValidate()) {
-                Toast.makeText(this, "validated", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun setupView() {
@@ -64,10 +48,6 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-//        signupViewModel = ViewModelProvider(
-//            this,
-//            ViewModelFactory(UserPreference.getInstance(dataStore))
-//        )[SignupViewModel::class.java]
 
         signupViewModel = ViewModelProvider(this)[SignupViewModel::class.java]
 
@@ -151,8 +131,6 @@ class SignupActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun isValidate(): Boolean = validateEmail() && validatePassword()
-
     private fun setupListeners() {
         binding.emailEditText.addTextChangedListener(TextFieldValidation(binding.emailEditText))
         binding.passwordEditText.addTextChangedListener(TextFieldValidation(binding.passwordEditText))
@@ -174,6 +152,8 @@ class SignupActivity : AppCompatActivity() {
             binding.passwordEditTextLayout.error =  getString(R.string.password_cant_be_less)
             binding.passwordEditText.requestFocus()
             return false
+        } else {
+            binding.passwordEditTextLayout.isErrorEnabled = false
         }
         return true
     }
