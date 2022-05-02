@@ -28,17 +28,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StoryApp">
-        <receiver
-            android:name=".widget.StoryWidget"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/story_widget_info" />
-        </receiver>
 
         <activity
             android:name=".ui.signup.SignupActivity"
@@ -95,9 +84,6 @@
                 android:resource="@xml/file_path" />
         </provider>
 
-        <service
-            android:name="com.fadlan.storyapp.widget.StoriesWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

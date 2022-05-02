@@ -41,10 +41,4 @@
     <string name="story_upload_failed">Cerita gagal di upload</string>
     <string name="select_an_image">Pilih gambar terlebih dahulu</string>
     <string name="fill_caption">Masukan caption terlebih dahulu</string>
-    <string name="auth" translatable="false">Bearer %1$s</string>
-    <string name="appwidget_text">Story Widget</string>
-    <string name="empty_text">Data tidak ada atau gagal diambil</string>
-    <string name="app_widget_description">widget deskripsi</string>
-    <string name="default_user">user tidak ada</string>
-    <string name="widget_story">Story buatan %1$s</string>
 </resources>

@@ -214,6 +214,7 @@ class NewStoryActivity : AppCompatActivity() {
                                 getString(R.string.story_uploaded),
                                 LENGTH_SHORT
                             ).show()
+                            finish()
                         }
                     }
                 }

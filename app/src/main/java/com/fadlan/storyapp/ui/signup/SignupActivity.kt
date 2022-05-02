@@ -6,8 +6,6 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -15,7 +13,6 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.fadlan.storyapp.R
 import com.fadlan.storyapp.databinding.ActivitySignupBinding
-import com.fadlan.storyapp.helper.FieldValidators
 import com.fadlan.storyapp.ui.login.LoginActivity
 
 class SignupActivity : AppCompatActivity() {
@@ -28,7 +25,6 @@ class SignupActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupView()
-        setupListeners()
         setupViewModel()
         setupAction()
         playAnimation()
@@ -67,13 +63,28 @@ class SignupActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
             when {
                 name.isEmpty() -> {
-                    binding.nameEditTextLayout.error = getString(R.string.input_name)
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.input_name),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    binding.loadingBar.visibility = View.GONE
                 }
                 email.isEmpty() -> {
-                    binding.emailEditTextLayout.error = getString(R.string.input_email)
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.input_email),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    binding.loadingBar.visibility = View.GONE
                 }
                 password.isEmpty() -> {
-                    binding.passwordEditTextLayout.error = getString(R.string.input_password)
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.input_password),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    binding.loadingBar.visibility = View.GONE
                 }
                 else -> {
                     signupViewModel.signUpUser(name, email, password)
@@ -129,47 +140,5 @@ class SignupActivity : AppCompatActivity() {
             )
             startDelay = 500
         }.start()
-    }
-
-    private fun setupListeners() {
-        binding.emailEditText.addTextChangedListener(TextFieldValidation(binding.emailEditText))
-        binding.passwordEditText.addTextChangedListener(TextFieldValidation(binding.passwordEditText))
-    }
-
-    private fun validateEmail(): Boolean {
-        if (!FieldValidators.isValidEmail(binding.emailEditText.text.toString())) {
-            binding.emailEditTextLayout.error =  getString(R.string.invalid_email)
-            binding.emailEditText.requestFocus()
-            return false
-        } else {
-            binding.emailEditTextLayout.isErrorEnabled = false
-        }
-        return true
-    }
-
-    private fun validatePassword(): Boolean {
-        if (binding.passwordEditText.text.toString().length < 6) {
-            binding.passwordEditTextLayout.error =  getString(R.string.password_cant_be_less)
-            binding.passwordEditText.requestFocus()
-            return false
-        } else {
-            binding.passwordEditTextLayout.isErrorEnabled = false
-        }
-        return true
-    }
-
-    inner class TextFieldValidation(private val view: View) : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            when (view.id) {
-                R.id.emailEditText -> {
-                    validateEmail()
-                }
-                R.id.passwordEditText -> {
-                    validatePassword()
-                }
-            }
-        }
     }
 }

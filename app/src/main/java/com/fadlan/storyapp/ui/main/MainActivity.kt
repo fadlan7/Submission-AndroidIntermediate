@@ -12,10 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.fadlan.storyapp.R
 import com.fadlan.storyapp.adapter.StoryAdapter
 import com.fadlan.storyapp.databinding.ActivityMainBinding
 import com.fadlan.storyapp.data.local.UserPreference
+import com.fadlan.storyapp.data.remote.response.ListStoryItem
 import com.fadlan.storyapp.ui.newstory.NewStoryActivity
 import com.fadlan.storyapp.ui.welcome.WelcomeActivity
 import kotlinx.coroutines.launch
@@ -24,7 +26,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
 
-    private val storyListAdapter by lazy { StoryAdapter() }
+    //    private val storyListAdapter by lazy { StoryAdapter() }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var storyListAdapter: StoryAdapter
     private lateinit var pref: UserPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +37,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         pref = UserPreference(this)
-        binding.rvStory.adapter = storyListAdapter
-
 
         setupViewModel()
         validation()
@@ -72,8 +74,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showRecyclerList() {
-        binding.rvStory.apply {
+        storyListAdapter = StoryAdapter()
+
+        recyclerView = binding.rvStory
+
+        recyclerView.apply {
             adapter = storyListAdapter
+
             layoutManager =
                 if (applicationContext.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     GridLayoutManager(context, 2)
@@ -89,13 +96,10 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                mainViewModel.story.observe(this@MainActivity){
+                    updateRecyclerViewData(it)
+                }
                 mainViewModel.getAllStory(pref.getUser().token)
-            }
-        }
-
-        mainViewModel.story.observe(this) { storyItem ->
-            if (storyItem != null) {
-                storyListAdapter.initUserData(storyItem)
             }
         }
 
@@ -112,4 +116,13 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
+
+    private fun updateRecyclerViewData(stories: List<ListStoryItem>) {
+        val recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()
+
+        storyListAdapter.submitList(stories)
+
+        recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
+    }
+
 }

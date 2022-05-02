@@ -41,10 +41,4 @@
     <string name="story_upload_failed">Story upload failed</string>
     <string name="select_an_image">Please select an image</string>
     <string name="fill_caption">Please fill the caption field</string>
-    <string name="auth" translatable="false">Bearer %1$s</string>
-    <string name="appwidget_text">Story Widget</string>
-    <string name="empty_text">Data is empty or failed to get data</string>
-    <string name="app_widget_description">This is an app widget description</string>
-    <string name="default_user">user not found</string>
-    <string name="widget_story">Story by %1$s</string>
 </resources>

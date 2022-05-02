@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.fadlan.storyapp.R
 import com.fadlan.storyapp.databinding.ActivityLoginBinding
 import com.fadlan.storyapp.helper.Constanta.LOGIN_PREF
-import com.fadlan.storyapp.helper.FieldValidators.isValidEmail
 import com.fadlan.storyapp.ui.main.MainActivity
 import com.fadlan.storyapp.data.local.UserModel
 import com.fadlan.storyapp.data.local.UserPreference
@@ -41,7 +40,6 @@ class LoginActivity : AppCompatActivity() {
         user = UserPreference(this)
 
         setupView()
-        setupListeners()
         setupViewModel()
         setupAction()
         playAnimation()
@@ -78,12 +76,21 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString().trim()
             when {
                 email.isEmpty() -> {
-                    binding.emailEditTextLayout.error = getString(R.string.input_email)
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.input_email),
+                        LENGTH_SHORT
+                    ).show()
+                    binding.loadingBar.visibility = View.GONE
                 }
                 password.isEmpty() -> {
-                    binding.passwordEditTextLayout.error = getString(R.string.input_password)
+                    Toast.makeText(
+                        applicationContext,
+                        getString(R.string.input_password),
+                        LENGTH_SHORT
+                    ).show()
+                    binding.loadingBar.visibility = View.GONE
                 }
-
                 else -> {
                     loginViewModel.getUserLogin(email, password)
                     loginViewModel.login.observe(this) { loginResult ->
@@ -103,18 +110,11 @@ class LoginActivity : AppCompatActivity() {
                             finish()
 
                             //save session
-                           session(
+                            session(
                                 UserModel(
                                     loginResult.token, true
                                 )
                             )
-                        }else{
-                            Toast.makeText(
-                                applicationContext,
-                               "Login gagal",
-                                LENGTH_SHORT
-                            ).show()
-                            binding.loadingBar.visibility = View.GONE
                         }
                     }
                 }
@@ -162,47 +162,5 @@ class LoginActivity : AppCompatActivity() {
             )
             startDelay = 500
         }.start()
-    }
-
-    private fun setupListeners() {
-        binding.emailEditText.addTextChangedListener(TextFieldValidation(binding.emailEditText))
-        binding.passwordEditText.addTextChangedListener(TextFieldValidation(binding.passwordEditText))
-    }
-
-    private fun validateEmail(): Boolean {
-        if (!isValidEmail(binding.emailEditText.text.toString())) {
-            binding.emailEditTextLayout.error = getString(R.string.invalid_email)
-            binding.emailEditText.requestFocus()
-            return false
-        } else {
-            binding.emailEditTextLayout.isErrorEnabled = false
-        }
-        return true
-    }
-
-    private fun validatePassword(): Boolean {
-         if (binding.passwordEditText.text.toString().length < 6) {
-            binding.passwordEditTextLayout.error = getString(R.string.password_cant_be_less)
-            binding.passwordEditText.requestFocus()
-            return false
-        } else {
-             binding.passwordEditTextLayout.isErrorEnabled = false
-         }
-        return true
-    }
-
-    inner class TextFieldValidation(private val view: View) : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            when (view.id) {
-                R.id.emailEditText -> {
-                    validateEmail()
-                }
-                R.id.passwordEditText -> {
-                    validatePassword()
-                }
-            }
-        }
     }
 }
