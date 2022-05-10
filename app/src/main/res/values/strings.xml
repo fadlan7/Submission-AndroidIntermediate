@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Story App</string>
     <string name="login">Login Now</string>
     <string name="create_account">Create New Account</string>
@@ -30,6 +30,7 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="upload">Upload</string>
+    <string name="instance_failed">Instance failed</string>
     <string name="language_setting">Language Setting</string>
     <string name="write_caption">Write a caption</string>
     <string name="fab_new_story">new story button</string>
@@ -41,4 +42,7 @@
     <string name="story_upload_failed">Story upload failed</string>
     <string name="select_an_image">Please select an image</string>
     <string name="fill_caption">Please fill the caption field</string>
+    <string name="no_permission">Not getting permission.</string>
+    <string name="retry">Try again</string>
+    <string name="timeout">Timeout</string>
 </resources>

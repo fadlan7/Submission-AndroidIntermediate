@@ -2,42 +2,33 @@ package com.fadlan.storyapp.ui.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import com.fadlan.storyapp.R
+import com.fadlan.storyapp.data.local.DataStoreViewModel
 import com.fadlan.storyapp.databinding.ActivityLoginBinding
-import com.fadlan.storyapp.helper.Constanta.LOGIN_PREF
 import com.fadlan.storyapp.ui.main.MainActivity
 import com.fadlan.storyapp.data.local.UserModel
-import com.fadlan.storyapp.data.local.UserPreference
 import com.fadlan.storyapp.ui.signup.SignupActivity
 
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var loginViewModel: LoginViewModel
+    private val loginViewModel by viewModels<LoginViewModel>()
+    private val dataStoreViewModel by viewModels<DataStoreViewModel>()
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var preferences: SharedPreferences
-    private lateinit var user: UserPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        preferences = getSharedPreferences(LOGIN_PREF, Context.MODE_PRIVATE)
-        user = UserPreference(this)
 
         setupView()
         setupViewModel()
@@ -59,14 +50,20 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        loginViewModel = ViewModelProvider(this)[LoginViewModel::class.java]
-
         loginViewModel.message.observe(this) {
             Toast.makeText(this, it, LENGTH_SHORT).show()
         }
 
         loginViewModel.isLoading.observe(this) {
-            binding.loadingBar.visibility = View.VISIBLE
+            loading(it)
+        }
+    }
+
+    private fun loading(loading: Boolean) {
+        binding.loadingBar.visibility = if (loading) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
 
@@ -76,32 +73,21 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString().trim()
             when {
                 email.isEmpty() -> {
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.input_email),
-                        LENGTH_SHORT
-                    ).show()
+                    customToast(getString(R.string.input_email))
                     binding.loadingBar.visibility = View.GONE
                 }
                 password.isEmpty() -> {
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.input_password),
-                        LENGTH_SHORT
-                    ).show()
+                    customToast(getString(R.string.input_password))
                     binding.loadingBar.visibility = View.GONE
                 }
                 else -> {
                     loginViewModel.getUserLogin(email, password)
+
                     loginViewModel.login.observe(this) { loginResult ->
                         binding.loadingBar.visibility = View.VISIBLE
 
                         if (loginResult != null) {
-                            Toast.makeText(
-                                applicationContext,
-                                getString(R.string.login_success),
-                                LENGTH_SHORT
-                            ).show()
+                            customToast(getString(R.string.login_success))
 
                             val intent = Intent(this, MainActivity::class.java)
                             intent.flags =
@@ -127,7 +113,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun session(userModel: UserModel) {
-        user.saveUser(userModel)
+        dataStoreViewModel.saveSession(userModel)
     }
 
 
@@ -162,5 +148,13 @@ class LoginActivity : AppCompatActivity() {
             )
             startDelay = 500
         }.start()
+    }
+
+    private fun customToast(text: String) {
+        Toast.makeText(
+            applicationContext,
+            text,
+            LENGTH_SHORT
+        ).show()
     }
 }

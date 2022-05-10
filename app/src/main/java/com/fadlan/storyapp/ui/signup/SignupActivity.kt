@@ -10,14 +10,14 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import com.fadlan.storyapp.R
 import com.fadlan.storyapp.databinding.ActivitySignupBinding
 import com.fadlan.storyapp.ui.login.LoginActivity
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
-    private lateinit var signupViewModel: SignupViewModel
+    private val signupViewModel by viewModels<SignupViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,15 +44,20 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-
-        signupViewModel = ViewModelProvider(this)[SignupViewModel::class.java]
-
         signupViewModel.message.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
 
         signupViewModel.isLoading.observe(this) {
-            binding.loadingBar.visibility = View.VISIBLE
+            loading(it)
+        }
+    }
+
+    private fun loading(loading: Boolean) {
+        binding.loadingBar.visibility = if (loading){
+            View.VISIBLE
+        }else{
+            View.GONE
         }
     }
 
@@ -63,37 +68,21 @@ class SignupActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
             when {
                 name.isEmpty() -> {
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.input_name),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    customToast(getString(R.string.input_name))
                     binding.loadingBar.visibility = View.GONE
                 }
                 email.isEmpty() -> {
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.input_email),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    customToast(getString(R.string.input_email))
                     binding.loadingBar.visibility = View.GONE
                 }
                 password.isEmpty() -> {
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.input_password),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    customToast(getString(R.string.input_password))
                     binding.loadingBar.visibility = View.GONE
                 }
                 else -> {
                     signupViewModel.signUpUser(name, email, password)
 
-                    Toast.makeText(
-                        applicationContext, getString(R.string.signup_success),
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    customToast(getString(R.string.signup_success))
                     finish()
                 }
             }
@@ -140,5 +129,13 @@ class SignupActivity : AppCompatActivity() {
             )
             startDelay = 500
         }.start()
+    }
+
+    private fun customToast (text: String){
+        Toast.makeText(
+            applicationContext,
+            text,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

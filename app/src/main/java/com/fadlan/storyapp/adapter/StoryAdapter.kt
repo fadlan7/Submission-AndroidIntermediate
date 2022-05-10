@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.fadlan.storyapp.R
 import com.fadlan.storyapp.data.remote.response.ListStoryItem
 import com.fadlan.storyapp.databinding.StoryItemBinding
 import com.fadlan.storyapp.helper.Constanta.EXTRA_CAPTION
@@ -20,16 +22,19 @@ import com.fadlan.storyapp.helper.Constanta.EXTRA_USER_NAME
 import com.fadlan.storyapp.helper.setLocalDateFormat
 import com.fadlan.storyapp.ui.detail.DetailActivity
 
-class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.ListViewHolder>(DiffCallback) {
+class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.ListViewHolder>(DiffCallback) {
     class ListViewHolder(private val binding: StoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(context: Context, data: ListStoryItem) {
+        fun bind(data: ListStoryItem) {
             binding.apply {
                 tvUserName.text = data.name
                 tvCaption.text = data.description
                 tvUploadDate.setLocalDateFormat(data.createdAt)
+
                 Glide.with(itemView.context)
                     .load(data.photoUrl)
+                    .placeholder(R.drawable.ic_baseline_image_24)
+                    .error(R.drawable.ic_baseline_image_24)
                     .into(ivStory)
 
                 root.setOnClickListener {
@@ -63,7 +68,9 @@ class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.ListViewHolder>(Dif
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val story = getItem(position)
-        holder.bind(holder.itemView.context, story)
+        if (story != null) {
+            holder.bind(story)
+        }
     }
 
     companion object {
@@ -76,7 +83,7 @@ class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.ListViewHolder>(Dif
                 oldItem: ListStoryItem,
                 newItem: ListStoryItem
             ): Boolean {
-                return oldItem == newItem
+                return oldItem.id == newItem.id
             }
         }
     }
