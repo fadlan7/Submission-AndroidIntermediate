@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Story App</string>
+    <string name="login">Masuk Sekarang</string>
+    <string name="create_account">Buat Akun</string>
+    <string name="image_welcome_desc">Gambar Welcome</string>
+    <string name="welcome_header">Selamat Datang</string>
+    <string name="welcome_title">Aplikasi untuk berbagi cerita yang memungkinkan pengguna mengambil foto dan membagikan foto tersebut dengan disertai caption.</string>
+    <string name="login_header">Login</string>
+    <string name="image_login_desc">Gambar Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="no_account">Belum mempunyai akun?</string>
+    <string name="signup_here">Buat akun disini</string>
+    <string name="signup_header">Buat Akun Baru</string>
+    <string name="image_signup_desc">Gambar SignUp</string>
+    <string name="name">Nama</string>
+    <string name="signup_btn">Buat Akun</string>
+    <string name="logout_btn">Keluar</string>
+    <string name="have_account">Sudah mempunyai Akun?</string>
+    <string name="login_now">Masuk disini</string>
+    <string name="input_email">Masukkan email</string>
+    <string name="input_password">Masukkan password</string>
+    <string name="login_success">Anda berhasil login</string>
+    <string name="signup_success">Anda berhasil membuat akun</string>
+    <string name="input_name">Masukkan nama</string>
+    <string name="story_image_desc">Gambar Story</string>
+    <string name="story_caption">Deskripsi Cerita</string>
+
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="upload">Unggah</string>
+    <string name="language_setting">Pengaturan Bahasa</string>
+    <string name="write_caption">Tulis caption</string>
+    <string name="fab_new_story">tombol buat story baru</string>
+    <string name="invalid_email">Email Tidak Sah!</string>
+    <string name="password_cant_be_less">Kata Sandi Tidak Boleh Kurang Dari 6</string>
+    <string name="new_story_bar">Cerita Baru</string>
+    <string name="date_dummy">JULI 07, 2022</string>
+    <string name="story_uploaded">Cerita Berhasil di upload</string>
+    <string name="story_upload_failed">Cerita gagal di upload</string>
+    <string name="select_an_image">Pilih gambar terlebih dahulu</string>
+    <string name="fill_caption">Masukan caption terlebih dahulu</string>
+</resources>

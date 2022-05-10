@@ -67,7 +67,7 @@
             motion:layout_constraintTop_toBottomOf="@+id/AppLabel"
             motion:layout_editor_absoluteY="85dp"
             android:alpha="1"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="0dp" />
         <Constraint
             android:id="@+id/welcome_header"
             android:layout_width="wrap_content"
@@ -76,13 +76,12 @@
             motion:layout_constraintTop_toBottomOf="@id/guidelineHorizontal"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="32dp" />
+            android:layout_marginTop="52dp" />
         <Constraint
             android:scaleX="0.5"
             android:scaleY="0.5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            motion:textSize="20sp"
             motion:layout_constraintLeft_toLeftOf="parent"
             motion:layout_constraintRight_toRightOf="parent"
             android:id="@+id/AppLabel"
@@ -90,15 +89,13 @@
             android:layout_marginTop="50dp" />
         <Constraint
             android:id="@+id/welcome_title"
-            android:layout_width="398dp"
+            android:layout_width="0dp"
             android:layout_height="59dp"
             android:alpha="1"
             motion:layout_constraintTop_toBottomOf="@+id/welcome_header"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginEnd="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            motion:layout_constraintEnd_toEndOf="@+id/img_welcome"
+            motion:layout_constraintStart_toStartOf="@+id/img_welcome" />
         <Constraint
             android:id="@+id/loginButton"
             android:layout_width="0dp"
@@ -119,7 +116,7 @@
             android:alpha="1"
             motion:layout_constraintStart_toStartOf="@+id/loginButton"
             android:layout_marginEnd="0dp"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="8dp" />
         <Constraint
             android:id="@+id/guidelineHorizontal"
             motion:layout_constraintEnd_toEndOf="parent"
