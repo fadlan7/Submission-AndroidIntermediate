@@ -7,7 +7,6 @@
     tools:context=".ui.main.MainActivity"
     android:background="@color/white">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_story"
         android:layout_width="match_parent"
@@ -21,14 +20,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/fab_new_story"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         android:layout_gravity="bottom|right"
         android:layout_margin="24dp"
         app:icon="@drawable/ic_baseline_camera_enhance_24"

@@ -1,32 +1,44 @@
 package com.fadlan.storyapp.data.local
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStore
 import com.fadlan.storyapp.helper.Constanta.STATE_KEY
 import com.fadlan.storyapp.helper.Constanta.TOKEN_KEY
-import com.fadlan.storyapp.helper.Constanta.USER_PREF
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class UserPreference(context: Context) {
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "userPref")
 
-    private val preferences = context.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
-    private val pref_edit = preferences.edit()
+class UserPreference @Inject constructor(@ApplicationContext val context: Context) {
 
-    fun saveUser(user: UserModel) {
-        pref_edit.putString(TOKEN_KEY, user.token)
-        pref_edit.putBoolean(STATE_KEY, user.isLogin)
-        pref_edit.apply()
+    private val dataStore = context.dataStore
+
+    suspend fun saveUser(user: UserModel) {
+        dataStore.edit {
+            it[TOKEN_KEY] = user.token
+            it[STATE_KEY] = user.isLogin
+        }
     }
 
-    fun getUser(): UserModel {
-        return UserModel(
-            preferences.getString(TOKEN_KEY, "") ?: "",
-            preferences.getBoolean(STATE_KEY,false)
-        )
+    fun getUser(): Flow<UserModel> {
+        return dataStore.data.map {
+            UserModel(
+                it[TOKEN_KEY] ?: "",
+                it[STATE_KEY] ?: false
+            )
+        }
     }
 
-     fun logout() {
-         pref_edit.remove(TOKEN_KEY)
-         pref_edit.putBoolean(STATE_KEY, false)
-         pref_edit.apply()
+    suspend fun logout() {
+        dataStore.edit {
+            it[TOKEN_KEY] = ""
+            it[STATE_KEY] = false
+        }
     }
 
 }

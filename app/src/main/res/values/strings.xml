@@ -30,6 +30,7 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="upload">Upload</string>
+    <string name="instance_failed">Instance failed</string>
     <string name="language_setting">Language Setting</string>
     <string name="write_caption">Write a caption</string>
     <string name="fab_new_story">new story button</string>
@@ -41,4 +42,16 @@
     <string name="story_upload_failed">Story upload failed</string>
     <string name="select_an_image">Please select an image</string>
     <string name="fill_caption">Please fill the caption field</string>
+    <string name="no_permission">Not getting permission.</string>
+    <string name="retry">Try again</string>
+    <string name="timeout">Timeout</string>
+    <string name="maps">Maps</string>
+    <string name="maps_custom_type" translatable="false">Custom Style</string>
+    <string name="maps_satellite_type" translatable="false">Satellite</string>
+    <string name="maps_terrain_type" translatable="false">Terrain</string>
+    <string name="maps_hybrid_type" translatable="false">Hybrid</string>
+    <string name="title_logout">Logout</string>
+    <string name="supporting_text_logout">Are you sure you want to Logout?</string>
+    <string name="cancel">Cancel</string>
+    <string name="accept">Yes</string>
 </resources>

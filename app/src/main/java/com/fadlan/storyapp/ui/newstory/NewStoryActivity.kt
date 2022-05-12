@@ -1,7 +1,6 @@
 package com.fadlan.storyapp.ui.newstory
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -10,39 +9,35 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils
 import com.fadlan.storyapp.R
-import com.fadlan.storyapp.data.remote.api.ApiConfig
-import com.fadlan.storyapp.data.remote.response.AddNewStoryResponse
+import com.fadlan.storyapp.data.local.UserDataViewModel
 import com.fadlan.storyapp.databinding.ActivityNewStoryBinding
 import com.fadlan.storyapp.helper.createTempFile
 import com.fadlan.storyapp.helper.reduceFileImage
 import com.fadlan.storyapp.helper.uriToFile
-import com.fadlan.storyapp.data.local.UserPreference
 import com.fadlan.storyapp.ui.main.MainActivity
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
+@AndroidEntryPoint
 class NewStoryActivity : AppCompatActivity() {
-
+    private val newStoryViewModel by viewModels<NewStoryViewModel>()
+    private val dataStoreViewModel by viewModels<UserDataViewModel>()
     private lateinit var binding: ActivityNewStoryBinding
-    private lateinit var pref: UserPreference
     private lateinit var currentPhotoPath: String
     private var getFile: File? = null
 
@@ -54,11 +49,7 @@ class NewStoryActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (!allPermissionsGranted()) {
-                Toast.makeText(
-                    this,
-                    "Tidak mendapatkan permission.",
-                    LENGTH_SHORT
-                ).show()
+                customToast(getString(R.string.no_permission))
                 finish()
             }
         }
@@ -72,8 +63,6 @@ class NewStoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNewStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        pref = UserPreference(this)
 
         supportActionBar?.title = getString(R.string.new_story_bar)
 
@@ -89,8 +78,10 @@ class NewStoryActivity : AppCompatActivity() {
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.uploadButton.setOnClickListener {
             uploadStory()
-            startActivity(Intent(this, MainActivity::class.java))
 
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
             finish()
         }
     }
@@ -146,7 +137,7 @@ class NewStoryActivity : AppCompatActivity() {
             // Convert rotated image to file
             try {
                 os = FileOutputStream(myFile)
-                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
+                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, os)
                 os.flush()
                 os.close()
 
@@ -154,7 +145,6 @@ class NewStoryActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
             binding.previewImageView.setImageBitmap(rotatedBitmap)
         }
     }
@@ -164,7 +154,6 @@ class NewStoryActivity : AppCompatActivity() {
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             val selectedImg: Uri = result.data?.data as Uri
-
             val myFile = uriToFile(selectedImg, this)
 
             getFile = myFile
@@ -175,6 +164,9 @@ class NewStoryActivity : AppCompatActivity() {
 
 
     private fun uploadStory() {
+        setLoadingState(true)
+
+        var isValid = true
 
         if (getFile == null) {
             Toast.makeText(
@@ -182,53 +174,46 @@ class NewStoryActivity : AppCompatActivity() {
                 getString(R.string.select_an_image),
                 LENGTH_SHORT
             ).show()
+            isValid = false
         }
 
         if (binding.textInputCaption.text.toString().isBlank()) {
             binding.outlinedTextField.error = getString(R.string.fill_caption)
+            isValid = false
         }
 
-        if (getFile != null) {
+        if (isValid) {
+
             val file = reduceFileImage(getFile as File)
             val captionText = binding.textInputCaption.text.toString()
-            val caption = captionText.toRequestBody("text/plain".toMediaType())
-            val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                "photo",
-                file.name,
-                requestImageFile
-            )
 
-            val token = "Bearer ${pref.getUser().token}"
-            val service = ApiConfig.getApiService().uploadImage(token, imageMultipart, caption)
-            service.enqueue(object : Callback<AddNewStoryResponse> {
-                override fun onResponse(
-                    call: Call<AddNewStoryResponse>,
-                    response: Response<AddNewStoryResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        if (responseBody != null && !responseBody.error) {
-                            Toast.makeText(
-                                applicationContext,
-                                getString(R.string.story_uploaded),
-                                LENGTH_SHORT
-                            ).show()
-                            finish()
-                        }
-                    }
+            dataStoreViewModel.getSession().observe(this@NewStoryActivity) {
+                newStoryViewModel.addNewStory("Bearer ${it.token}", file, captionText)
+                newStoryViewModel.message.observe(this@NewStoryActivity) {
+                    customToast(getString(R.string.story_uploaded))
                 }
-
-                override fun onFailure(call: Call<AddNewStoryResponse>, t: Throwable) {
-                    Toast.makeText(
-                        applicationContext,
-                        getString(R.string.story_upload_failed),
-                        LENGTH_SHORT
-                    ).show()
-                }
-
-            })
+            }
+        } else {
+            setLoadingState(false)
         }
+    }
+
+    private fun setLoadingState(isLoading: Boolean) {
+        binding.apply {
+            cameraButton.isEnabled = !isLoading
+            galleryButton.isEnabled = !isLoading
+            textInputCaption.isEnabled = !isLoading
+
+            loadingBar.visibility = View.VISIBLE
+        }
+    }
+
+    private fun customToast(text: String) {
+        Toast.makeText(
+            applicationContext,
+            text,
+            LENGTH_SHORT
+        ).show()
     }
 
     companion object {

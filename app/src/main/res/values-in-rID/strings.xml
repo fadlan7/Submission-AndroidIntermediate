@@ -30,6 +30,7 @@
     <string name="camera">Kamera</string>
     <string name="gallery">Galeri</string>
     <string name="upload">Unggah</string>
+    <string name="instance_failed">Gagal melakukan instance</string>
     <string name="language_setting">Pengaturan Bahasa</string>
     <string name="write_caption">Tulis caption</string>
     <string name="fab_new_story">tombol buat story baru</string>
@@ -41,4 +42,12 @@
     <string name="story_upload_failed">Cerita gagal di upload</string>
     <string name="select_an_image">Pilih gambar terlebih dahulu</string>
     <string name="fill_caption">Masukan caption terlebih dahulu</string>
+    <string name="no_permission">Tidak mendapatkan izin.</string>
+    <string name="retry">Coba lagi</string>
+    <string name="timeout">Waktu habis</string>
+    <string name="maps">Peta</string>
+    <string name="title_logout">Keluar</string>
+    <string name="supporting_text_logout">Apakah kamu yakin ingin keluar?</string>
+    <string name="cancel">Batal</string>
+    <string name="accept">Ya</string>
 </resources>

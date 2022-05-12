@@ -1,11 +1,13 @@
 package com.fadlan.storyapp.data.remote.response
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class GetAllStoryResponse(
 
 	@field:SerializedName("listStory")
-	val listStory: ArrayList<ListStoryItem>,
+	val listStoryItem: List<ListStoryItem>,
 
 	@field:SerializedName("error")
 	val error: Boolean,
@@ -14,26 +16,14 @@ data class GetAllStoryResponse(
 	val message: String
 )
 
+@Entity
 data class ListStoryItem(
-
-	@field:SerializedName("photoUrl")
-	val photoUrl: String,
-
-	@field:SerializedName("createdAt")
 	val createdAt: String,
-
-	@field:SerializedName("name")
-	val name: String,
-
-	@field:SerializedName("description")
 	val description: String,
-
-	@field:SerializedName("lon")
-	val lon: Double,
-
-	@field:SerializedName("id")
+	@PrimaryKey
 	val id: String,
-
-	@field:SerializedName("lat")
-	val lat: Double
+	val name: String,
+	val photoUrl: String,
+	val lat: Double,
+	val lon: Double
 )
