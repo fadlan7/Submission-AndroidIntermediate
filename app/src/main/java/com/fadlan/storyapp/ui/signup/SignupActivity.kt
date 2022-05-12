@@ -14,7 +14,9 @@ import androidx.activity.viewModels
 import com.fadlan.storyapp.R
 import com.fadlan.storyapp.databinding.ActivitySignupBinding
 import com.fadlan.storyapp.ui.login.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private val signupViewModel by viewModels<SignupViewModel>()

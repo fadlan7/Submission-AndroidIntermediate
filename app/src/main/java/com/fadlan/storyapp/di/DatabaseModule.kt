@@ -26,9 +26,10 @@ class DatabaseModule {
     @Singleton
     fun provideStoryDatabase(@ApplicationContext context: Context): StoriesDatabase {
         return Room.databaseBuilder(
-            context.applicationContext,
+            context,
             StoriesDatabase::class.java,
             "story_database"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 }

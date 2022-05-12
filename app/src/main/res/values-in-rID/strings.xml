@@ -45,4 +45,9 @@
     <string name="no_permission">Tidak mendapatkan izin.</string>
     <string name="retry">Coba lagi</string>
     <string name="timeout">Waktu habis</string>
+    <string name="maps">Peta</string>
+    <string name="title_logout">Keluar</string>
+    <string name="supporting_text_logout">Apakah kamu yakin ingin keluar?</string>
+    <string name="cancel">Batal</string>
+    <string name="accept">Ya</string>
 </resources>

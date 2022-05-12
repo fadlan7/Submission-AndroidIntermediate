@@ -31,9 +31,9 @@ class StoriesPagingSource @Inject constructor(
                 apiService.getAllStories("Bearer $authToken", position, params.loadSize)
 
             LoadResult.Page(
-                data = responseData.listStory,
+                data = responseData.listStoryItem,
                 prevKey = if (position == INITIAL_PAGE_INDEX) null else position - 1,
-                nextKey = if (responseData.listStory.isNullOrEmpty()) null else position + 1
+                nextKey = if (responseData.listStoryItem.isNullOrEmpty()) null else position + 1
             )
 
         } catch (exception: Exception) {

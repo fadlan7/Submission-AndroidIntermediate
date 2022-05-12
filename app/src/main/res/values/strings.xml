@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Story App</string>
     <string name="login">Login Now</string>
     <string name="create_account">Create New Account</string>
@@ -45,4 +45,13 @@
     <string name="no_permission">Not getting permission.</string>
     <string name="retry">Try again</string>
     <string name="timeout">Timeout</string>
+    <string name="maps">Maps</string>
+    <string name="maps_custom_type" translatable="false">Custom Style</string>
+    <string name="maps_satellite_type" translatable="false">Satellite</string>
+    <string name="maps_terrain_type" translatable="false">Terrain</string>
+    <string name="maps_hybrid_type" translatable="false">Hybrid</string>
+    <string name="title_logout">Logout</string>
+    <string name="supporting_text_logout">Are you sure you want to Logout?</string>
+    <string name="cancel">Cancel</string>
+    <string name="accept">Yes</string>
 </resources>

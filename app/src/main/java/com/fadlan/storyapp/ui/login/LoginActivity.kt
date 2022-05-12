@@ -13,16 +13,17 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.viewModels
 import com.fadlan.storyapp.R
-import com.fadlan.storyapp.data.local.DataStoreViewModel
+import com.fadlan.storyapp.data.local.UserDataViewModel
 import com.fadlan.storyapp.databinding.ActivityLoginBinding
 import com.fadlan.storyapp.ui.main.MainActivity
 import com.fadlan.storyapp.data.local.UserModel
 import com.fadlan.storyapp.ui.signup.SignupActivity
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private val loginViewModel by viewModels<LoginViewModel>()
-    private val dataStoreViewModel by viewModels<DataStoreViewModel>()
+    private val dataStoreViewModel by viewModels<UserDataViewModel>()
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

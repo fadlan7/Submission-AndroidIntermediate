@@ -7,6 +7,7 @@ import com.fadlan.storyapp.data.local.StoriesDatabase
 import com.fadlan.storyapp.data.local.UserPreference
 import com.fadlan.storyapp.data.remote.api.ApiService
 import com.fadlan.storyapp.data.remote.response.*
+import com.fadlan.storyapp.helper.reduceFileImage
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -27,7 +28,7 @@ class StoriesRepository @Inject constructor(
     val login: LiveData<LoginResult> = _login
 
     private val _story = MutableLiveData<List<ListStoryItem>>()
-    val story: LiveData<List<ListStoryItem>> = _story
+    val listStoryItem: LiveData<List<ListStoryItem>> = _story
 
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
@@ -83,12 +84,16 @@ class StoriesRepository @Inject constructor(
             })
     }
 
-    fun uploadStory(authToken: String, image: File, caption: String) {
-        val captionText = caption.toRequestBody("text/plain".toMediaType())
-        val imageFile = image.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val imageMultipart: MultipartBody.Part =
-            MultipartBody.Part.createFormData("image", image.name, imageFile)
+    fun uploadStory(authToken: String, image: File, description: String) {
+        val imageReduce = reduceFileImage(image)
 
+        val captionText = description.toRequestBody("text/plain".toMediaType())
+        val imageFile = imageReduce.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+            "photo",
+            imageReduce.name,
+            imageFile
+        )
         val service = apiService.uploadImage(authToken, imageMultipart, captionText)
         service.enqueue(object : Callback<AddNewStoryResponse> {
             override fun onResponse(
@@ -97,7 +102,7 @@ class StoriesRepository @Inject constructor(
             ) {
                 if (response.isSuccessful) {
                     if (response.body() != null && !response.body()!!.error) {
-                        _message.value = response.body()?.message
+                        _message.value = response.body()!!.message
                     } else {
                         _message.value = response.message()
                     }
@@ -117,7 +122,7 @@ class StoriesRepository @Inject constructor(
             config = PagingConfig(
                 pageSize = 5
             ),
-            remoteMediator = StoriesRemoteMediator(apiService, preference, storiesDatabase),
+            remoteMediator = StoriesRemoteMediator(storiesDatabase, apiService, preference),
             pagingSourceFactory = {
                 storiesDatabase.storiesDao().getAllStory()
             }
@@ -132,7 +137,7 @@ class StoriesRepository @Inject constructor(
                     response: Response<GetAllStoryResponse>
                 ) {
                     if (response.isSuccessful) {
-                        _story.postValue(response.body()?.listStory)
+                        _story.postValue(response.body()?.listStoryItem)
                     }
                 }
 

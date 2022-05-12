@@ -10,11 +10,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val storyRepository: StoriesRepository) : ViewModel() {
+class MainViewModel @Inject constructor(storyRepository: StoriesRepository) : ViewModel() {
 
-    val login: LiveData<LoginResult> = storyRepository.login
-    val message: LiveData<String> = storyRepository.message
+//    val login: LiveData<LoginResult> = storyRepository.login
+//    val message: LiveData<String> = storyRepository.message
     val isLoading: LiveData<Boolean> = storyRepository.isLoading
 
-    val storyList: LiveData<PagingData<ListStoryItem>> = storyRepository.getAllStories().cachedIn(viewModelScope)
+    val listStory: LiveData<PagingData<ListStoryItem>> =
+        storyRepository.getAllStories().cachedIn(viewModelScope)
 }

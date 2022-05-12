@@ -4,8 +4,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
 object Constanta {
-    const val LOGIN_PREF = "login_preferences"
-    const val USER_PREF = "user_preferences"
     val TOKEN_KEY = stringPreferencesKey("token")
     val STATE_KEY = booleanPreferencesKey("state")
 

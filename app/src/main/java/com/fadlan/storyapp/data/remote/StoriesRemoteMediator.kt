@@ -15,9 +15,9 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 class StoriesRemoteMediator @Inject constructor(
+    private val database: StoriesDatabase,
     private val apiService: ApiService,
     private val preference: UserPreference,
-    private val database: StoriesDatabase
 ) : RemoteMediator<Int, ListStoryItem>() {
 
     private companion object {
@@ -53,7 +53,7 @@ class StoriesRemoteMediator @Inject constructor(
 
         try {
             val authToken: String = preference.getUser().first().token
-            val responseData = apiService.getAllStories("Bearer $authToken", page, state.config.pageSize).listStory
+            val responseData = apiService.getAllStories("Bearer $authToken", page, state.config.pageSize).listStoryItem
             val endOfPaginationReached = responseData.isEmpty()
 
             database.withTransaction {

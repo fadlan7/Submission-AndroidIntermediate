@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(private val storyRepository: StoriesRepository) : ViewModel() {
-    val storyList: LiveData<List<ListStoryItem>> = storyRepository.story
+    val listStoryItem: LiveData<List<ListStoryItem>> = storyRepository.listStoryItem
 
     fun getAllStoriesLocation(authToken: String) {
         storyRepository.getAllStoriesLocation("Bearer $authToken")

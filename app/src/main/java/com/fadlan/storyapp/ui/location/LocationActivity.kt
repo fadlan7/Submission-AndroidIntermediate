@@ -1,15 +1,19 @@
 package com.fadlan.storyapp.ui.location
 
 import android.Manifest
+import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Transformations.map
 import com.fadlan.storyapp.R
-import com.fadlan.storyapp.data.local.DataStoreViewModel
+import com.fadlan.storyapp.data.local.UserDataViewModel
 import com.fadlan.storyapp.databinding.ActivityLocationBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -17,14 +21,17 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityLocationBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mMap: GoogleMap
     private val locationViewModel by viewModels<LocationViewModel>()
-    private val dataStoreViewModel by viewModels<DataStoreViewModel>()
+    private val dataStoreViewModel by viewModels<UserDataViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +55,19 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
         showStartMarker()
         getMyLastLocation()
+        setMapStyle()
+    }
+
+    private fun setMapStyle() {
+        try {
+            val success =
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.")
+            }
+        } catch (exception: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", exception)
+        }
     }
 
     private val requestPermissionLauncher =
@@ -95,7 +115,7 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
         dataStoreViewModel.getSession().observe(this) {
             locationViewModel.getAllStoriesLocation(it.token)
         }
-        locationViewModel.storyList.observe(this) {
+        locationViewModel.listStoryItem.observe(this) {
             for (i in it.listIterator()) {
                 val locationPoint = LatLng(i.lat, i.lon)
                 mMap.addMarker(
@@ -107,6 +127,35 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
         }
-
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.map_options, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.normal_type -> {
+                mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+                true
+            }
+            R.id.satellite_type -> {
+                mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+                true
+            }
+            R.id.terrain_type -> {
+                mMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
+                true
+            }
+            R.id.hybrid_type -> {
+                mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+
 }

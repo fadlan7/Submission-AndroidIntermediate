@@ -1,7 +1,6 @@
 package com.fadlan.storyapp.adapter
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.fadlan.storyapp.R
@@ -83,7 +81,7 @@ class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.ListViewHolde
                 oldItem: ListStoryItem,
                 newItem: ListStoryItem
             ): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem == newItem
             }
         }
     }

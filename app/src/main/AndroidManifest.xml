@@ -3,6 +3,7 @@
     package="com.fadlan.storyapp">
 
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
@@ -38,7 +39,12 @@
 
         <activity
             android:name=".ui.location.LocationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ui.main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.main.MainActivity" />
+        </activity>
         <activity
             android:name=".ui.signup.SignupActivity"
             android:exported="false" />
@@ -50,7 +56,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.newstory.NewStoryActivity"
-            android:exported="false">
+            android:exported="false"
+            android:parentActivityName=".ui.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fadlan.storyapp.ui.main.MainActivity" />
@@ -63,7 +70,8 @@
         </activity>
         <activity
             android:name=".ui.detail.DetailActivity"
-            android:exported="false">
+            android:exported="false"
+            android:parentActivityName=".ui.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fadlan.storyapp.ui.main.MainActivity" />
@@ -76,7 +84,8 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

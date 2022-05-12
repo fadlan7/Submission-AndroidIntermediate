@@ -10,7 +10,6 @@ import javax.inject.Inject
 @HiltViewModel
 class NewStoryViewModel @Inject constructor(private val storyRepository: StoriesRepository) : ViewModel() {
     val message: LiveData<String> = storyRepository.message
-    val isLoading: LiveData<Boolean> = storyRepository.isLoading
 
     fun addNewStory(authToken: String, imageMultipart: File, caption: String) {
         storyRepository.uploadStory(authToken, imageMultipart, caption)
